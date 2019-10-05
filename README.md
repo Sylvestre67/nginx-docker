@@ -8,3 +8,5 @@ To run:
 ```bash 
 $ docker-compose up --build
 ```
+Front-end application is accesible at [http://0.0.0.0](http://0.0.0.0).
+API at [http://0.0.0.0/api](http://0.0.0.0/api)
