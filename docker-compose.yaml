@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  nginx_gateway: 
+    container_name: nginx_gateway
+    entrypoint: ["/bin/bash"]
+    command: ["./wait-for-it.sh", "nginx_frontend:3000", "--",
+              "./wait-for-it.sh", "nginx_api:4000", "--", 
+              "nginx","-g","daemon off;"]
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    depends_on:
+      - nginx_frontend
+      - nginx_api
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - nginx
+
+  nginx_frontend:
+    container_name: nginx_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - nginx
+
+  nginx_api: 
+    container_name: nginx_api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - 4000:4000
+    networks:
+      - nginx
+
+networks:
+  nginx:
